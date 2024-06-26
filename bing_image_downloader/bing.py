@@ -50,7 +50,7 @@ class Bing:
             elif shorthand == "transparent":
                 return "+filterui:photo-transparent"
             elif shorthand == 'special-common':
-                return "+filterui:licenseType-Any+filterui:aspect-wide+filterui:imagesize-large"
+                return "+filterui:licenseType-Any+filterui:aspect-wide+filterui:imagesize-large+filterui:photo-photo"
             else:
                 return ""
 
