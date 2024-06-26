@@ -72,15 +72,15 @@ class Bing:
             path = urllib.parse.urlsplit(link).path
             filename = posixpath.basename(path).split('?')[0]
             file_type = filename.split(".")[-1]
-            if file_type.lower() not in ["jpe", "jpeg", "jfif", "exif", "tiff", "gif", "bmp", "png", "webp", "jpg"]:
-                file_type = "jpg"
+            if file_type.lower() not in ["jpe", "jpeg", "png", "webp", "jpg"]:
+                print("[%] Skipping {}. Not a valid image type.".format(link))
+                return
                 
             if self.verbose:
                 # Download the image
                 print("[%] Downloading Image #{} from {}".format(self.download_count, link))
                 
-            self.save_image(link, self.output_dir.joinpath("Image_{}.{}".format(
-                str(self.download_count), file_type)))
+            self.save_image(link, self.output_dir.joinpath("{}.{}".format(filename, file_type)))
             if self.verbose:
                 print("[%] File Downloaded !\n")
 
