@@ -1,3 +1,4 @@
+import re
 import os, sys
 import shutil
 from pathlib import Path
@@ -8,7 +9,7 @@ except ImportError:  # Python 3
     from .bing import Bing
 
 
-def download(query, limit=100, output_dir='dataset', adult_filter_off=True, 
+def download(query, limit=100, output_dir='dataset', sub_dir=None, adult_filter_off=True, 
 force_replace=False, timeout=60, filter="", verbose=True):
 
     # engine = 'bing'
@@ -16,9 +17,10 @@ force_replace=False, timeout=60, filter="", verbose=True):
         adult = 'off'
     else:
         adult = 'on'
-
-    
-    image_dir = Path(output_dir).joinpath(query).absolute()
+    # remove space and special characters in query
+    if sub_dir:
+        sub_dir = re.sub(r'[\\/*?:"<>|]', '', query).replace(' ', '_')
+    image_dir = Path(output_dir).joinpath(sub_dir).absolute()
 
     if force_replace:
         if Path.is_dir(image_dir):

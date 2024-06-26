@@ -80,7 +80,8 @@ class Bing:
                 # Download the image
                 print("[%] Downloading Image #{} from {}".format(self.download_count, link))
                 
-            self.save_image(link, self.output_dir.joinpath(filename))
+            self.save_image(link, self.output_dir.joinpath("Image_{}.{}".format(
+                str(self.download_count), file_type)))
             if self.verbose:
                 print("[%] File Downloaded !\n")
 
