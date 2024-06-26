@@ -49,6 +49,8 @@ class Bing:
                 return "+filterui:photo-animatedgif"
             elif shorthand == "transparent":
                 return "+filterui:photo-transparent"
+            elif shorthand == 'special-common':
+                return "+filterui:licenseType-Any+filterui:aspect-wide+filterui:imagesize-large"
             else:
                 return ""
 
