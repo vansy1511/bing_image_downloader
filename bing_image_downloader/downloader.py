@@ -18,8 +18,8 @@ force_replace=False, timeout=60, filter="", verbose=True):
     else:
         adult = 'on'
     # remove space and special characters in query
-    if sub_dir:
-        sub_dir = re.sub(r'[\\/*?:"<>|]', '', query).replace(' ', '_')
+    # if sub_dir:
+    #     sub_dir = re.sub(r'[\\/*?:"<>|]', '', query).replace(' ', '_')
     image_dir = Path(output_dir).joinpath(sub_dir).absolute()
 
     if force_replace:
@@ -32,12 +32,16 @@ force_replace=False, timeout=60, filter="", verbose=True):
             Path.mkdir(image_dir, parents=True)
 
     except Exception as e:
-        print('[Error]Failed to create directory.', e)
+        # print('[Error]Failed to create directory.', e)
         sys.exit(1)
         
-    print("[%] Downloading Images to {}".format(str(image_dir.absolute())))
+    # # print("[%] Downloading Images to {}".format(str(image_dir.absolute())))
     bing = Bing(query, limit, image_dir, adult, timeout, filter, verbose)
-    bing.run()
+    downloaded_image_paths = bing.run()
+    # # print(f"[%] Downloaded {len(downloaded_image_paths)} images to {str(image_dir.absolute())}")
+    # for image_path in downloaded_image_paths:
+    #     # print(f"[%] {image_path}")
+    return downloaded_image_paths
 
 
 if __name__ == '__main__':
