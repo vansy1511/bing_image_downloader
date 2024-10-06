@@ -20,6 +20,7 @@ class Bing:
         self.filter = filter
         self.verbose = verbose
         self.seen = set()
+        self.downloaded_image_paths = []
 
         assert type(limit) == int, "limit must be integer"
         self.limit = limit
@@ -61,7 +62,7 @@ class Bing:
         request = urllib.request.Request(link, None, self.headers)
         image = urllib.request.urlopen(request, timeout=self.timeout).read()
         if not imghdr.what(None, image):
-            print('[Error]Invalid image, not saving {}\n'.format(link))
+            # print('[Error]Invalid image, not saving {}\n'.format(link))
             raise ValueError('Invalid image, not saving {}\n'.format(link))
         with open(str(file_path), 'wb') as f:
             f.write(image)
@@ -75,27 +76,29 @@ class Bing:
             filename = posixpath.basename(path).split('?')[0]
             file_type = filename.split(".")[-1]
             if file_type.lower() not in ["jpe", "jpeg", "png", "webp", "jpg"]:
-                print("[%] Skipping {}. Not a valid image type.".format(link))
+                # print("[%] Skipping {}. Not a valid image type.".format(link))
                 return
                 
-            if self.verbose:
+            # if self.verbose:
                 # Download the image
-                print("[%] Downloading Image #{} from {}".format(self.download_count, link))
+                # print("[%] Downloading Image #{} from {}".format(self.download_count, link))
                 
             self.save_image(link, self.output_dir.joinpath("Image_{}.{}".format(
                 str(self.download_count), file_type)))
-            if self.verbose:
-                print("[%] File Downloaded !\n")
+            # if self.verbose:
+                # print("[%] File Downloaded !\n")
+            self.downloaded_image_paths.append(self.output_dir.joinpath("Image_{}.{}".format(
+                str(self.download_count), file_type)))
 
         except Exception as e:
             self.download_count -= 1
-            print("[!] Issue getting: {}\n[!] Error:: {}".format(link, e))
+            # print("[!] Issue getting: {}\n[!] Error:: {}".format(link, e))
 
     
     def run(self):
         while self.download_count < self.limit:
-            if self.verbose:
-                print('\n\n[!!]Indexing page: {}\n'.format(self.page_counter + 1))
+            # if self.verbose:
+                # print('\n\n[!!]Indexing page: {}\n'.format(self.page_counter + 1))
             # Parse the page source and download pics
             request_url = 'https://www.bing.com/images/async?q=' + urllib.parse.quote_plus(self.query) \
                           + '&first=' + str(self.page_counter) + '&count=' + str(self.limit) \
@@ -104,12 +107,12 @@ class Bing:
             response = urllib.request.urlopen(request)
             html = response.read().decode('utf8')
             if html ==  "":
-                print("[%] No more images are available")
+                # print("[%] No more images are available")
                 break
             links = re.findall('murl&quot;:&quot;(.*?)&quot;', html)
-            if self.verbose:
-                print("[%] Indexed {} Images on Page {}.".format(len(links), self.page_counter + 1))
-                print("\n===============================================\n")
+            # if self.verbose:
+                # print("[%] Indexed {} Images on Page {}.".format(len(links), self.page_counter + 1))
+                # print("\n===============================================\n")
 
             for link in links:
                 if self.download_count < self.limit and link not in self.seen:
@@ -117,4 +120,5 @@ class Bing:
                     self.download_image(link)
 
             self.page_counter += 1
-        print("\n\n[%] Done. Downloaded {} images.".format(self.download_count))
+        # print("\n\n[%] Done. Downloaded {} images.".format(self.download_count))
+        return self.downloaded_image_paths
