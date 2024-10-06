@@ -68,7 +68,7 @@ def main():
     with open('image_based_quizzes/eval-2024-10-04T02_53_00-table-image-based-quizzes.json', 'r') as f:
         image_based_quizzes = json.load(f)
 
-    for quiz_object in image_based_quizzes[0]['word_to_image_description'][:5]:
+    for quiz_object in image_based_quizzes[0]['word_to_image_description']:
         results = get_quiz_info(quiz_object)
         final_results.extend(results)
         for result in results:
@@ -80,7 +80,7 @@ def main():
         for result in results:
             download_images(result['folder'], result['query_string'], 5, filter)
     
-    with open('image_based_qizzes/query_info.json', 'w') as f:
+    with open('image_based_quizzes/query_info.json', 'w') as f:
         f.write(json.dumps(final_results, indent=2, ensure_ascii=False))
     print("Downloaded images successfully")
 
