@@ -31,6 +31,7 @@ def get_quizzes_from_eval(eval_filepath):
                     quiz["pass"] = True
                 result[0]['word_to_image_description'].append(quiz)
             elif quiz['type'] == 'image_description_to_word':
+                quiz['word'] = body['test']['vars']['word']
                 if quiz['type'] in failed:
                     quiz["pass"] = False
                 else:
